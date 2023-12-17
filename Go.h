@@ -40,7 +40,6 @@ class Go:public ConstructGame{
 
     public:
     Go(int size);
-    void reset() override;
     bool set(int x, int y, PointState pointstate)override;
     Gamestate Ultimate_judgment()override;
     MementIF* create_memento()override;

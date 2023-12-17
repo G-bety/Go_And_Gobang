@@ -70,12 +70,6 @@ bool Go::set(int x, int y, PointState pointstate){
 }
 
 
-void Go::reset(){
-    this->chessboard->initChessboard();
-    this->gamestate = Gamestate::Keeping_battle;
-    this->gameturn = GameTurn::Black;
-}
-
 MementIF *Go::create_memento()
 {
      return static_cast<MementIF*>(new GoMement(chessboard, gameturn, gamestate));

@@ -44,6 +44,14 @@ bool ConstructGame::unundo()
     this->restore_from_memento(this->caretaker->getMemento(step));
 }
 
+void ConstructGame::reset()
+{
+    this->chessboard->initChessboard();
+    this->gamestate = Gamestate::Keeping_battle;
+    this->gameturn = GameTurn::Black;
+    this->step = 0;
+}
+
 
 void ConstructGame::restore_from_memento(MementIF *)
 {

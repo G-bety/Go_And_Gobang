@@ -17,10 +17,8 @@ bool Gobang::set(int x, int y, PointState pointstate){//此处不需要判断游
 
 
 void Gobang::reset(){
-    chessboard->initChessboard();
+    ConstructGame::reset();
     this->last_piece = std::make_tuple(-1,-1);
-    this->gamestate = Gamestate::Keeping_battle;
-    this->gameturn = GameTurn::Black;
 }
 
 Gobang::Gobang(int size):ConstructGame(size)

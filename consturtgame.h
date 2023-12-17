@@ -47,7 +47,7 @@ class ConstructGame:public OperationWithFile
       virtual bool undo();
       virtual bool unundo();
       virtual Gamestate Ultimate_judgment()=0;
-      virtual void reset()=0;
+      virtual void reset();
       virtual Chessboard* get_chessboard(){
           return chessboard;
       }
