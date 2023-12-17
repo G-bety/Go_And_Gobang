@@ -73,20 +73,20 @@ bool Go::set(int x, int y, PointState pointstate){
 void Go::reset(){
     this->chessboard->initChessboard();
     this->gamestate = Gamestate::Keeping_battle;
-    this->turn = GameTurn::Black;
+    this->gameturn = GameTurn::Black;
 }
 
-MomentIF *Go::create_memento()
+MementIF *Go::create_memento()
 {
-     return static_cast<MomentIF*>(new GoMoment(chessboard, turn, gamestate));
+     return static_cast<MementIF*>(new GoMement(chessboard, gameturn, gamestate));
 }
 
-void Go::restore_from_memento(MomentIF* IFgomoment)
+void Go::restore_from_memento(MementIF* IFgomoment)
 {
-    GoMoment* gomoment = static_cast<GoMoment*>(IFgomoment);
+    GoMement* gomoment = static_cast<GoMement*>(IFgomoment);
     auto [firstElement, secondElement, thirdElement] = gomoment->get_state();
     this->chessboard = firstElement;
-    this->turn = secondElement;
+    this->gameturn = secondElement;
     this->gamestate = thirdElement;
 }
 
@@ -199,7 +199,19 @@ std::tuple<int,int> Go::getmash(){
 }
 
 Gamestate Go::Ultimate_judgment(){
-    return Gamestate::Keeping_battle;
+    std::tuple<int,int> mashes = getmash();
+    int count_black = std::get<0>(mashes);
+    int count_white = std::get<1>(mashes);
+    QString str;
+    if(count_black-6.5 < count_white){
+        this->gamestate = Gamestate::White_win;
+    }
+    else if(count_black-6.5 > count_white) {
+        this->gamestate = Gamestate::Black_win;
+    }
+    else{
+        this->gamestate = Gamestate::Keeping_battle;
+    }
 }
 
 bool Go::capture(const vector<Chessboardpoint*>& vec){
@@ -219,8 +231,8 @@ bool Go::liberty(Chessboardpoint* point, vector<Chessboardpoint*>& capture_point
     while(!Q.empty()){
         auto now = Q.front();
         Q.pop();
-        if(now->get_state() == PointState::Blank) return true;
-        if(now->get_state() != nowstate) continue;
+        if(now->get_state() == PointState::Blank) return true;//说明有气，返回true
+        if(now->get_state() != nowstate) continue;//说明非相连的子，忽略
         capture_points.push_back(now);
         if( now->get_down() != nullptr && auxiliary.count(now->get_down())==0){
             Q.push(now->get_down());
@@ -242,7 +254,7 @@ bool Go::liberty(Chessboardpoint* point, vector<Chessboardpoint*>& capture_point
     return false;
 }
 
-Go::Go(int size):Game(size){
+Go::Go(int size):ConstructGame(size){
     caretaker = new Go_CareTaker();
 }
 

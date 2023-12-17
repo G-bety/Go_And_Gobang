@@ -8,16 +8,16 @@
 #include "Gamestate.h"
 #include <tuple>
 #include <fstream>
-class GoMoment:public MomentIF{
+class GoMement:public MementIF{
     private:
     Chessboard* chessboard;
     GameTurn turn;
     Gamestate gamestate;
     public:
-    GoMoment(Chessboard* chessboard, GameTurn turn, Gamestate gamestate);
+    GoMement(Chessboard* chessboard, GameTurn turn, Gamestate gamestate);
     //void set_state(Chessboard* chessboard, GameTurn turn, Gamestate gamestate);
     std::tuple<Chessboard* , GameTurn , Gamestate> get_state();
-    ~GoMoment();
+    ~GoMement();
     void savetofile(std::ofstream& outfile);
     void readfromfile(std::ifstream& outfile);
 };

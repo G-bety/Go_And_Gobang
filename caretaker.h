@@ -3,17 +3,18 @@
 #include <vector>
 #include "MomentIF.h"
 #include <fstream>
+#include "operationwithfile.h"
 
 class CareTaker
 {
 public:
     CareTaker();
-    virtual MomentIF* getMemento(int i);
-    virtual MomentIF* addMemento(MomentIF*, int);
+    virtual MementIF* getMemento(int i);
+    virtual MementIF* addMemento(MementIF*, int);
     virtual void savetofile(std::ofstream& outfile);
     virtual void readfromfile(std::ifstream& infile, int)=0;
 protected:
-    std::vector<MomentIF*> mementolist;
+    std::vector<MementIF*> mementolist;
 };
 
 #endif // CARETAKER_H

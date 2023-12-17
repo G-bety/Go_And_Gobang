@@ -13,8 +13,8 @@ void Gobang_CareTaker::readfromfile(std::ifstream &infile, int board_size)
     infile.read(reinterpret_cast<char *>(&size),sizeof (size));
     for(int i = 0 ; i < size ;i++){
        Chessboard* chessboard = new Chessboard(board_size);
-       GobangMoment* gobangmoment = new GobangMoment(chessboard,std::make_tuple(-1,-1),GameTurn::Black, Gamestate::Black_win);//初始化，无所谓，之后会更新
+       GobangMement* gobangmoment = new GobangMement(chessboard,std::make_tuple(-1,-1),GameTurn::Black, Gamestate::Black_win);//初始化，无所谓，之后会更新
        gobangmoment->readfromfile(infile);
-       mementolist.push_back(dynamic_cast<MomentIF*>(gobangmoment));
+       mementolist.push_back(dynamic_cast<MementIF*>(gobangmoment));
     }
 }

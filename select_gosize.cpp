@@ -21,15 +21,15 @@ void Select_Gosize::setupUi()
 
 void Select_Gosize::on_button19_clicked(bool checked)
 {
-    emit pro_size(19);
+    emit emit_sizesig(19);
 }
 
 void Select_Gosize::on_button13_clicked(bool checked)
 {
-    emit pro_size(13);
+    emit emit_sizesig(13);
 }
 
 void Select_Gosize::on_button11_clicked(bool checked)
 {
-    emit pro_size(11);
+    emit emit_sizesig(11);
 }

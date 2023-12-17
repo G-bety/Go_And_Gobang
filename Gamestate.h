@@ -4,7 +4,8 @@
 enum class Gamestate{
     White_win,
     Black_win,
-    Keeping_battle
+    Keeping_battle,
+    Dogfall,
 };
 
 #endif // GAMESTATE_H

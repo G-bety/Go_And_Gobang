@@ -2,17 +2,6 @@
 #include <QPainter>
 #include <cmath>
 
-void BoardShow::onButton_undo_Clicked()
-{
-    emit button_undo_clicked();
-}
-
-void BoardShow::onButton_reset_Clicked()
-{
-    emit pro_reset();
-}
-
-
 BoardShow::BoardShow(QWidget *parent) : QWidget(parent)
 {
 }
@@ -26,10 +15,20 @@ BoardShow::BoardShow(int size,std::vector<std::vector<Chessboardpoint*>> points,
     statusbar->setGeometry((size+2)*d, 4*d, 4*d,d);
     button_undo = new QPushButton("Undo", this);
     button_undo->setGeometry((size+2)*d, 8*d, 4*d, d);
-    QObject::connect(button_undo,&QPushButton::clicked,this, &BoardShow::onButton_undo_Clicked);
+    QObject::connect(button_undo,&QPushButton::clicked,this, [&](){
+        emit emit_undosig();
+    });
     button_reset = new QPushButton("Reset",this);
     button_reset->setGeometry((size+2)*d, 10*d, 4*d,d);
-    QObject::connect(button_reset,&QPushButton::clicked,this, &BoardShow::onButton_reset_Clicked);
+    QObject::connect(button_reset,&QPushButton::clicked,this, [&](){
+        emit emit_reset();
+    });
+    button_surrender = new QPushButton("弃子认输",this);
+    button_surrender->setGeometry((size+2)*d, 12*d, 4*d,d);
+    QObject::connect(button_surrender,&QPushButton::clicked,this, [&](){
+        emit emit_surrender();
+    });
+
 
 }
 
@@ -87,18 +86,22 @@ void BoardShow::paintEvent(QPaintEvent *event){
     else if(gamestate == Gamestate::White_win){
         this->statusbar->showMessage("白胜");
     }
+
+    else if(gamestate == Gamestate::Dogfall){
+        this->statusbar->showMessage("平局");
+    }
 }
 
 void BoardShow::mouseReleaseEvent(QMouseEvent *event)
-        {
-            int x = static_cast<int>(std::round(event->pos().x()/static_cast<double>(d)));
-            int y = static_cast<int>(std::round(event->pos().y()/static_cast<double>(d)));
+    {
+        int x = static_cast<int>(std::round(event->pos().x()/static_cast<double>(d)));
+        int y = static_cast<int>(std::round(event->pos().y()/static_cast<double>(d)));
 
-            if (x >= 1 && x <= size && y >= 1 && y <= size) {
-                emit signalset(x-1,y-1);
-            }
-
+        if (x >= 1 && x <= size && y >= 1 && y <= size) {
+            emit emit_setsig(x-1,y-1);
         }
+
+    }
 
 
 void BoardShow::showboard(std::vector<std::vector<Chessboardpoint*>> points, GameTurn gameturn, Gamestate gamestate){
@@ -110,7 +113,7 @@ void BoardShow::showboard(std::vector<std::vector<Chessboardpoint*>> points, Gam
 
 void BoardShow::closeEvent(QCloseEvent *event)
 {
-
+    //关闭当前窗口会弹出一个对话框确认是否保存
     QMessageBox::StandardButton answer;
 
     QMessageBox::StandardButtons buttons = QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel;
@@ -123,14 +126,14 @@ void BoardShow::closeEvent(QCloseEvent *event)
 
     if (answer == QMessageBox::Save)
     {
-        emit pro_save();
+        emit emit_save();
     }
     else if (answer == QMessageBox::Cancel)
     {
         event->ignore(); // 取消关闭操作
         return;
     }
-    emit winclose();
+    emit emit_closesig();
     QWidget::closeEvent(event);
 }
 

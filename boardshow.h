@@ -3,11 +3,9 @@
 
 #include <QWidget>
 #include "Chessboard.h"
-#include "Game.h"
+#include "consturtgame.h"
 #include <QMouseEvent>
-#include "Game.h"
 #include <vector>
-#include "Game.h"
 #include "PointState.h"
 #include <QPushButton>
 #include <QStatusBar>
@@ -26,8 +24,7 @@ protected:
     QPushButton* button_undo;
     QPushButton* button_reset;
     QStatusBar* statusbar;
-    void onButton_undo_Clicked();
-     void onButton_reset_Clicked();
+    QPushButton* button_surrender;
 
 public:
     explicit BoardShow(QWidget *parent = nullptr);
@@ -38,11 +35,13 @@ public:
     void showboard(std::vector<std::vector<Chessboardpoint*>> chessboard, GameTurn gameturn, Gamestate gamestate);
     void closeEvent(QCloseEvent *event) override;
 signals:
-    void signalset(int x, int y);
-    void button_undo_clicked();
-    void winclose();
-    void pro_save();
-    void pro_reset();
+    void emit_setsig(int x, int y);
+    void emit_undosig();
+    void emit_closesig();
+    void emit_save();
+    void emit_reset();
+    void emit_surrender();
+    void emit_Ultimate_judgement();
 };
 
 #endif // BOARDSHOW_H

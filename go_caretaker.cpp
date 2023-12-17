@@ -13,8 +13,8 @@ void Go_CareTaker::readfromfile(std::ifstream &infile,int chessboard_size)
     infile.read(reinterpret_cast<char *>(&size),sizeof (size));
     for(int i = 0 ; i < size ;i++){
        Chessboard* temp = new Chessboard(chessboard_size);
-       GoMoment* gomoment = new GoMoment(temp, GameTurn::Black, Gamestate::Black_win);//初始化，无所谓，之后会更新
+       GoMement* gomoment = new GoMement(temp, GameTurn::Black, Gamestate::Black_win);//初始化，无所谓，之后会更新
        gomoment->readfromfile(infile);
-       mementolist.push_back(dynamic_cast<MomentIF*>(gomoment));
+       mementolist.push_back(dynamic_cast<MementIF*>(gomoment));
     }
 }

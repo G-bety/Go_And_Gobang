@@ -16,8 +16,8 @@ private:
 public:
     void closeEvent(QCloseEvent *event) override;
 signals:
-    void pro_size(int size);
-    void pro_close();
+    void emit_sizesig(int size);
+    void emit_closesig();
 };
 
 #endif // SELECT_SIZEIF_H

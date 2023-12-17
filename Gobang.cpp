@@ -6,11 +6,12 @@
 */
 
 bool Gobang::set(int x, int y, PointState pointstate){//此处不需要判断游戏的输赢，判断游戏输赢的函数由Ultimate_judgment实现
-    this->turn = turn;
+    this->gameturn = gameturn;
     Chessboardpoint* point = this->chessboard->getpoint(x,y);
     if(point->get_state()!=PointState::Blank) return false;
     point->set_state(pointstate);
     last_piece = std::make_tuple(x,y);
+    this->gamestate =  this->Ultimate_judgment();
     return true;
 }
 
@@ -19,44 +20,44 @@ void Gobang::reset(){
     chessboard->initChessboard();
     this->last_piece = std::make_tuple(-1,-1);
     this->gamestate = Gamestate::Keeping_battle;
-    this->turn = GameTurn::Black;
+    this->gameturn = GameTurn::Black;
 }
 
-Gobang::Gobang(int size):Game(size)
+Gobang::Gobang(int size):ConstructGame(size)
 {
     caretaker = new Gobang_CareTaker();
 }
 
-MomentIF* Gobang::create_memento()
+MementIF* Gobang::create_memento()
 {
-    return static_cast<MomentIF*>(new GobangMoment(chessboard, last_piece, turn, gamestate));
+    return static_cast<MementIF*>(new GobangMement(chessboard, last_piece, gameturn, gamestate));
 }
 
-void Gobang::restore_from_memento(MomentIF * momentIF)
+void Gobang::restore_from_memento(MementIF * momentIF)
 {
-    GobangMoment* gobangmoment = static_cast<GobangMoment*>(momentIF);
-    auto [chessboard, last_piece, turn, state] = gobangmoment->get_state();
+    GobangMement* gobangmoment = static_cast<GobangMement*>(momentIF);
+    auto [chessboard, last_piece, gameturn, state] = gobangmoment->get_state();
     this->chessboard = chessboard;
     this->last_piece = last_piece;
-    this->turn = turn;
+    this->gameturn = gameturn;
     this->gamestate = state;
 }
 
 void Gobang::savetofile(std::ofstream & outfile)
 {
-        Game::savetofile(outfile);
+        ConstructGame::savetofile(outfile);
         outfile.write(reinterpret_cast<char*>(&last_piece), sizeof(last_piece));
 }
 
 void Gobang::readfromfile(std::ifstream & infile)
 {
-       Game::readfromfile(infile);
+       ConstructGame::readfromfile(infile);
        infile.read(reinterpret_cast<char*>(&last_piece),sizeof(last_piece));
 }
 
 
 
-Gamestate Gobang::Ultimate_judgment(){
+Gamestate Gobang::Ultimate_judgment(){//终局判断
     int x = std::get<0>(last_piece);
     int y = std::get<1>(last_piece);
     PointState nowstate = chessboard->getpoint(x,y)->get_state();
@@ -123,6 +124,15 @@ Gamestate Gobang::Ultimate_judgment(){
         return ret;
     }
 
-    return Gamestate::Keeping_battle;
+    //如果没有子可下，返回平局
+    for(int i=0 ; i < size ; i++){
+        for (int j = 0 ; j < size ; j++){
+            if(chessboard->getpoint(i,j)->get_state()==PointState::Blank){
+                return Gamestate::Keeping_battle;
+            }
+        }
+    }
+
+    return Gamestate::Dogfall;
 }
 

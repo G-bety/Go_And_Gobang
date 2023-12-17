@@ -15,16 +15,16 @@ Select_neworold::~Select_neworold()
 
 void Select_neworold::closeEvent(QCloseEvent *event)
 {
-    emit emit_close();
+    emit emit_closesig();
     QWidget::closeEvent(event);
 }
 
 void Select_neworold::on_newgame_clicked(bool checked)
 {
-    emit emit_newgame();
+    emit emit_newgamesig();
 }
 
 void Select_neworold::on_load_oldgame_clicked(bool checked)
 {
-    emit emit_loadoldgame();
+    emit emit_loadoldgamesig();
 }

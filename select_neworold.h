@@ -16,9 +16,9 @@ public:
     ~Select_neworold();
     void closeEvent(QCloseEvent *event) override;
 signals:
-    void emit_newgame();
-    void emit_loadoldgame();
-    void emit_close();
+    void emit_newgamesig();
+    void emit_loadoldgamesig();
+    void emit_closesig();
 
 private slots:
     void on_newgame_clicked(bool checked);

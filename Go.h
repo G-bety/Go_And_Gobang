@@ -1,6 +1,5 @@
 #ifndef GO_H
 #define GO_H
-#include "Game.h"
 #include "GoMoment.h"
 #include <tuple>
 #include <unordered_set>
@@ -8,10 +7,12 @@
 #include <iostream>
 #include <fstream>
 #include <go_caretaker.h>
+#include "consturtgame.h"
+
+
 using namespace std;
 
-
-class Go:public Game{
+class Go:public ConstructGame{
     private:
 
     /**
@@ -39,11 +40,11 @@ class Go:public Game{
 
     public:
     Go(int size);
+    void reset() override;
     bool set(int x, int y, PointState pointstate)override;
     Gamestate Ultimate_judgment()override;
-    void reset()override;
-    MomentIF* create_memento()override;
-    void restore_from_memento(MomentIF*)override;
+    MementIF* create_memento()override;
+    void restore_from_memento(MementIF*)override;
     std::tuple<int,int> getmash();//点目函数
 };
 

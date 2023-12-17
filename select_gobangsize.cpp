@@ -21,10 +21,10 @@ void Select_Gobangsize::setupUi()
 
 void Select_Gobangsize::on_button17_clicked(bool checked)
 {
-    emit pro_size(17);
+    emit emit_sizesig(17);
 }
 
 void Select_Gobangsize::on_button15_clicked(bool checked)
 {
-    emit pro_size(15);
+    emit emit_sizesig(15);
 }

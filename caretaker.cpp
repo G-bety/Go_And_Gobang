@@ -6,7 +6,7 @@ CareTaker::CareTaker()
 
 }
 
-MomentIF *CareTaker::getMemento(int i)
+MementIF *CareTaker::getMemento(int i)
 {
     std::printf("%d\n",mementolist.size()-1);
     if(i>mementolist.size()-1){
@@ -16,7 +16,7 @@ MomentIF *CareTaker::getMemento(int i)
     return this->mementolist[i];
 }
 
-MomentIF *CareTaker::addMemento(MomentIF * moment, int index)
+MementIF *CareTaker::addMemento(MementIF * moment, int index)
 {
     if(index <mementolist.size()){
         auto old_moment = mementolist[index];

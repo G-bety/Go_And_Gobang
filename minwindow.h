@@ -17,7 +17,7 @@ public:
     ~MinWindow();
 
 signals:
-    void pro_creator(Creator*);
+    void emit_creatorsig(Creator*);
 
 
 private slots:

@@ -1,12 +1,12 @@
 #ifndef GOBANG_H
 #define GOBANG_H
-#include "Game.h"
+#include "consturtgame.h"
 #include "GobangMoment.h"
 #include <tuple>
 #include <iostream>
 #include <fstream>
 #include "gobang_caretaker.h"
-class Gobang:public Game{
+class Gobang:public ConstructGame{
     private:
     std::tuple<int,int> last_piece;
 
@@ -16,8 +16,8 @@ class Gobang:public Game{
     Gamestate Ultimate_judgment()override;
     void reset()override;
     Gobang(int size);
-    MomentIF* create_memento()override;
-    void restore_from_memento(MomentIF*)override;
+    MementIF* create_memento()override;
+    void restore_from_memento(MementIF*)override;
     void savetofile(std::ofstream &) override;
     void readfromfile(std::ifstream &) override;
 };

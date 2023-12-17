@@ -1,4 +1,3 @@
-#include <Windows.h>
 #include "Controller.h"
 
 Controller::Controller(QDir storedir):storedir(storedir)
@@ -12,7 +11,7 @@ Controller::Controller(QDir storedir):storedir(storedir)
     game = nullptr;
     creator = nullptr;
     oldgamelist = nullptr;
-    QObject::connect(minwindow, &MinWindow::pro_creator, this, &Controller::get_creator);
+    QObject::connect(minwindow, &MinWindow::emit_creatorsig, this, &Controller::process_and_get_creator);
 
     //getboard_and_show();
 }
@@ -56,12 +55,7 @@ void Controller::save_current_game()
     QDateTime currentTime = QDateTime::currentDateTime();
     QString timeString = currentTime.toString("yyyyMMdd_hhmmss");
     QDir* constructdir;
-    if(Go_Creator* go_creator = dynamic_cast<Go_Creator*>(creator)){
-        constructdir = new QDir(storedir.filePath("Go"));
-    }
-    else if(Gobang_Creator* gobang_creator = dynamic_cast<Gobang_Creator*>(creator)){
-        constructdir = new QDir(storedir.filePath("Gobang"));
-    }
+    constructdir = creator->dir_product(storedir);
     QString filePath = constructdir->absoluteFilePath(timeString.append(".bin"));
     //QString filePath = constructdir->absoluteFilePath("test.bin");
     this->savetofile(filePath);
@@ -88,7 +82,7 @@ void Controller::readfromfile(QString filePath)
         std::printf("打开文件失败");
     }
     infile.read(reinterpret_cast<char*>(&this->size),sizeof(this->size));
-    this->game = creator->product(size);//这步骤只是为了初始化
+    this->game = creator->game_product(size);//这步骤只是为了初始化
     make_board();//同时顺带初始化棋盘
     game->readfromfile(infile);
     infile.close();
@@ -100,70 +94,47 @@ void Controller::getboard_and_show(){
 
 void Controller::make_board()
 {
-    this->game = creator->product(size);
-    if(Go_Creator* go_creator = dynamic_cast<Go_Creator*>(creator)){
-        this->boardshow = new Goboardshow(size, game->get_chessboard()->get_points());
-        QObject::connect(dynamic_cast<Goboardshow*>(boardshow), &Goboardshow::pro_skip, this , &Controller::skip_operation);
-
-        //关于点目的信号设置
-
-        QObject::connect(dynamic_cast<Goboardshow*>(boardshow), &Goboardshow::pro_getmash, this , &Controller::process_getmash_and_show);
-        QObject::connect(this, &Controller::showmash, dynamic_cast<Goboardshow*>(boardshow), &Goboardshow::showmash);
-    }
-    else if(Gobang_Creator* gobang_creator = dynamic_cast<Gobang_Creator*>(creator)){
-        this->boardshow = new GobangBoardshow(size, game->get_chessboard()->get_points());
-    }
+    this->game = creator->game_product(size);
+    this->boardshow = creator->boardshow_product(size, game, this);
     //this->boardshow->deleteLater();
-    QObject::connect(boardshow, &BoardShow::winclose, this, &Controller::process_boardclose);
-    QObject::connect(boardshow, &BoardShow::signalset, this , &Controller::setchessboardpoint);
-    QObject::connect(boardshow, &BoardShow::button_undo_clicked, this , &Controller::undo_operation);
-    QObject::connect(boardshow, &BoardShow::pro_save, this , &Controller::save_current_game);
-    QObject::connect(boardshow, &BoardShow::pro_reset, this , &Controller::process_reset);
+    QObject::connect(boardshow, &BoardShow::emit_closesig, this, &Controller::process_boardclose);
+    QObject::connect(boardshow, &BoardShow::emit_setsig, this , &Controller::setchessboardpoint);
+    QObject::connect(boardshow, &BoardShow::emit_undosig, this , &Controller::undo_operation);
+    QObject::connect(boardshow, &BoardShow::emit_save, this , &Controller::save_current_game);
+    QObject::connect(boardshow, &BoardShow::emit_reset, this , &Controller::process_reset);
+    QObject::connect(boardshow, &BoardShow::emit_surrender, this , &Controller::process_surrender);
+    QObject::connect(boardshow, &BoardShow::emit_Ultimate_judgement, this , &Controller::process_Ultimate_judgement);
 }
 
-void Controller::close(){
-    emit closeevent();
-}
 
 
 //确定了生成器也就确定了游戏模式
-void Controller::get_creator(Creator * creator)
+void Controller::process_and_get_creator(Creator * creator)
 {
     this->creator = creator;
     minwindow->hide();
     this->select_neworold = new Select_neworold();
     select_neworold->show();
     //select_neworold->deleteLater();
-    QObject::connect(select_neworold, &Select_neworold::emit_newgame, this, &Controller::process_new_game);
-    QObject::connect(select_neworold, &Select_neworold::emit_close, this, &Controller::process_selectneworoldclose);
-    QObject::connect(select_neworold, &Select_neworold::emit_loadoldgame, this, &Controller::process_load_old_game);
+    QObject::connect(select_neworold, &Select_neworold::emit_newgamesig, this, &Controller::process_new_game);
+    QObject::connect(select_neworold, &Select_neworold::emit_closesig, this, &Controller::process_selectneworoldclose);
+    QObject::connect(select_neworold, &Select_neworold::emit_loadoldgamesig, this, &Controller::process_load_old_game);
 }
 
 void Controller::process_new_game()
 {
     //先调用选择期盼大小的类并展示出来
-    if(Go_Creator* go_creator = dynamic_cast<Go_Creator*>(creator)){
-        this->select_size = new Select_Gosize();
-    }
-
-    if(Gobang_Creator* gobang_creator = dynamic_cast<Gobang_Creator*>(creator)){
-        this->select_size = new Select_Gobangsize();
-    }
+    this->select_size = creator->select_size_product();
    select_neworold->hide();
    select_size->show();
-   QObject::connect(select_size, &Select_sizeIF::pro_size, this, &Controller::process_sizeinfo_and_makeboard);
-   QObject::connect(select_size, &Select_sizeIF::pro_close, this, &Controller::process_selectsizeclose);
+   QObject::connect(select_size, &Select_sizeIF::emit_sizesig, this, &Controller::process_sizeinfo_and_makeboard);
+   QObject::connect(select_size, &Select_sizeIF::emit_closesig, this, &Controller::process_selectsizeclose);
 }
 
 void Controller::process_load_old_game()
 {
     QDir* constructdir;
-    if(Go_Creator* go_creator = dynamic_cast<Go_Creator*>(creator)){
-        constructdir = new QDir(storedir.filePath("Go"));
-    }
-    else if(Gobang_Creator* gobang_creator = dynamic_cast<Gobang_Creator*>(creator)){
-        constructdir = new QDir(storedir.filePath("Gobang"));
-    }
+    constructdir = creator->dir_product(storedir);
     if(!constructdir->exists()){
            constructdir->mkpath(".");
     }
@@ -227,13 +198,7 @@ void Controller::process_selectneworoldclose()
 void Controller::load_old_game(QString filename)
 {
     QDir* constructdir;
-    if(Go_Creator* go_creator = dynamic_cast<Go_Creator*>(creator)){
-        constructdir = new QDir(storedir.filePath("Go"));
-    }
-    else if(Gobang_Creator* gobang_creator = dynamic_cast<Gobang_Creator*>(creator)){
-        constructdir = new QDir(storedir.filePath("Gobang"));
-    }
-
+    constructdir = creator->dir_product(storedir);
     QString filePath = constructdir->absoluteFilePath(filename);
     current_gamestore_name = filePath;
     this->readfromfile(filePath);
@@ -246,11 +211,23 @@ void Controller::load_old_game(QString filename)
 void Controller::process_getmash_and_show()
 {
     tuple<int,int> mashes = dynamic_cast<Go*>(game)->getmash();
-    emit showmash(mashes);
+    dynamic_cast<Goboardshow*>(boardshow)->showmash(mashes);
 }
 
 void Controller::process_reset()
 {
     game->reset();
+    getboard_and_show();
+}
+
+void Controller::process_surrender()
+{
+    game->surrender();
+    getboard_and_show();
+}
+
+void Controller::process_Ultimate_judgement()
+{
+    game->Ultimate_judgment();
     getboard_and_show();
 }

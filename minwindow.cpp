@@ -16,12 +16,12 @@ MinWindow::~MinWindow()
 
 void MinWindow::on_Button_SelectGo_clicked(bool checked)
 {
-    emit pro_creator(new Go_Creator());
+    emit emit_creatorsig(new Go_Creator());
 }
 
 void MinWindow::on_Button_SelectGoang_clicked(bool checked)
 {
-    emit pro_creator(new Gobang_Creator());
+    emit emit_creatorsig(new Gobang_Creator());
 }
 
 

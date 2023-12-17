@@ -2,7 +2,7 @@
 #include <tuple>
 #include "Chessboard.h"
 
-GoMoment::GoMoment(Chessboard *chessboard, GameTurn turn, Gamestate gamestate)
+GoMement::GoMement(Chessboard *chessboard, GameTurn turn, Gamestate gamestate)
 {
     if(chessboard == nullptr){//这步是因为有时只是需要初始化Goment方便后面readfromfile，此时只需要对this->chessboard进行简单初始化即可
         this->chessboard = new Chessboard(0);
@@ -20,23 +20,23 @@ GoMoment::GoMoment(Chessboard *chessboard, GameTurn turn, Gamestate gamestate)
     this->gamestate = gamestate;
 }*/
 
-std::tuple<Chessboard* , GameTurn , Gamestate> GoMoment::get_state(){
+std::tuple<Chessboard* , GameTurn , Gamestate> GoMement::get_state(){
     return std::make_tuple(chessboard, turn, gamestate);
 }
 
-GoMoment::~GoMoment()
+GoMement::~GoMement()
 {
     delete chessboard;
 }
 
-void GoMoment::savetofile(std::ofstream& outfile)
+void GoMement::savetofile(std::ofstream& outfile)
 {
     chessboard->savetofile(outfile);
     outfile.write(reinterpret_cast<char *>(&turn), sizeof (turn));
     outfile.write(reinterpret_cast<char *>(&gamestate), sizeof (gamestate));
 }
 
-void GoMoment::readfromfile(std::ifstream& infile)
+void GoMement::readfromfile(std::ifstream& infile)
 {
     chessboard->readfromfile(infile);
     infile.read(reinterpret_cast<char *>(&turn), sizeof (turn));
