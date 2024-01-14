@@ -10,6 +10,10 @@ Gobang_AI::Gobang_AI(int size):Gobang(size){}
 bool Gobang_AI::set(int x, int y)
 {
     if(ConstructGame::set(x,y)){
+        //Gamestate ret =  this->Ultimate_judgment();
+        if(this->Ultimate_judgment()!=Gamestate::Keeping_battle){
+            return true;
+        }
         if(this->observe_step < this->step) {
             this->step = this->observe_step;
         }

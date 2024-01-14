@@ -66,6 +66,8 @@ void Othellboardshow::paintEvent(QPaintEvent *event)
     else if(gamestate == Gamestate::Dogfall){
         this->statusbar->showMessage("平局");
     }
+    this->username->showMessage(user_info.name);
+    this->userwinratio->showMessage("胜率："+QString::number(double(user_info.win_games)/(1e-6+user_info.win_games+user_info.loss_games)));
 }
 
 void Othellboardshow::mouseReleaseEvent(QMouseEvent *event)
