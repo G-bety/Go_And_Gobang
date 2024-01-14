@@ -439,7 +439,7 @@ void Othello::restore_from_memento(MementIF * mementif)
 {
     OthelloMement* othellomement = static_cast<OthelloMement*>(mementif);
     auto [chessboard, gameturn, gamestate] = othellomement->get_state();
-    this->chessboard = chessboard;
+    this->chessboard = new Chessboard(*chessboard);
     this->gameturn = gameturn;
             this->gamestate = gamestate;
 }

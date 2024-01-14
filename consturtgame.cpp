@@ -20,20 +20,20 @@ bool ConstructGame::set(int x, int y){
     if(gameturn==GameTurn::Black){
         if(set(x,y,PointState::Black)){
             gameturn = GameTurn::White;
-            this->gamestate =  this->Ultimate_judgment();
             this->caretaker->addMemento(this->create_memento(), this->step);
             this->step++;
             this->observe_step = this->step;
+            this->gamestate =  this->Ultimate_judgment();
             return true;
         }
     }
     if(gameturn==GameTurn::White){
         if(set(x,y,PointState::White)){
             gameturn = GameTurn::Black;
-            this->gamestate =  this->Ultimate_judgment();
             this->caretaker->addMemento(this->create_memento(), this->step);
             this->step++;
             this->observe_step = this->step;
+            this->gamestate =  this->Ultimate_judgment();
             return true;
         }
     }

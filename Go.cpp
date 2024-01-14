@@ -79,7 +79,7 @@ void Go::restore_from_memento(MementIF* IFgomoment)
 {
     GoMement* gomoment = static_cast<GoMement*>(IFgomoment);
     auto [firstElement, secondElement, thirdElement] = gomoment->get_state();
-    this->chessboard = firstElement;
+    this->chessboard = new Chessboard(*firstElement);
     this->gameturn = secondElement;
     this->gamestate = thirdElement;
 }

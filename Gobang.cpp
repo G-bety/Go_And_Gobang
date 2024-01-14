@@ -34,7 +34,7 @@ void Gobang::restore_from_memento(MementIF * momentIF)
 {
     GobangMement* gobangmoment = static_cast<GobangMement*>(momentIF);
     auto [chessboard, last_piece, gameturn, state] = gobangmoment->get_state();
-    this->chessboard = chessboard;
+    this->chessboard = new Chessboard(*chessboard);
     this->last_piece = last_piece;
     this->gameturn = gameturn;
     this->gamestate = state;
