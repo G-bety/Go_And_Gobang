@@ -42,6 +42,7 @@ class Go:public ConstructGame{
     Go(int size);
     bool set(int x, int y, PointState pointstate)override;
     Gamestate Ultimate_judgment()override;
+    Gamestate GoUltimate_judgment();
     MementIF* create_memento()override;
     void restore_from_memento(MementIF*)override;
     std::tuple<int,int> getmash();//点目函数

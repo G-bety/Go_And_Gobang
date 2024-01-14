@@ -9,12 +9,15 @@
 #include <QString>
 #include <string>
 #include "minwindow.h"
+#include "login.h"
 
 int main(int argc, char* argv[]){
     QApplication app(argc, argv);
-    QDir directory(".");
+    QDir directory("./infos");
 
-    Controller* controller = new Controller(directory);
+    Login* login = new Login(directory);
+    login->show();
+    //Controller* controller = new Controller(directory);
     //controller->show();
     //string current_path = QDir::currentPath().toStdString();
     //std::cout<<current_path<<endl;

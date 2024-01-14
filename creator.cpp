@@ -1,6 +1,6 @@
 #include "creator.h"
 #include "controller.h"
-
+#include "gobang_ai.h"
 
 Creator::Creator()
 {
@@ -56,4 +56,36 @@ BoardShow *Go_Creator::boardshow_product(int size , ConstructGame* game ,Control
 Select_sizeIF *Go_Creator::select_size_product()
 {
     return new Select_Gosize();
+}
+
+ConstructGame *Othello_Creator::game_product(int size)
+{
+    return new Othello(size);
+}
+
+QDir *Othello_Creator::dir_product(const QDir & storedir)
+{
+    return new QDir(storedir.filePath("Othello"));
+}
+
+BoardShow *Othello_Creator::boardshow_product(int size, ConstructGame *game, Controller *controller)
+{
+    BoardShow* boardshow = new Othellboardshow(size, game->get_chessboard()->get_points());
+    return boardshow;
+}
+
+Select_sizeIF *Othello_Creator::select_size_product()
+{
+    return new Select_OthelloSize();
+}
+
+
+ConstructGame *Gobang_AI_1_Creator::game_product(int size)
+{
+    return new Gobang_AI_1(size);
+}
+
+ConstructGame *Gobang_AI_2_Creator::game_product(int size)
+{
+    return new Gobang_AI_2(size);
 }

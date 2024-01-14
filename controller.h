@@ -21,6 +21,7 @@
 #include "gobangboardshow.h"
 #include "operationwithfile.h"
 
+
 class Controller:public QWidget
 {
     Q_OBJECT
@@ -39,10 +40,14 @@ private:
     QDir storedir;
     QString current_gamestore_name;
     OldgameListShow* oldgamelist;
+    User_info user_info;
     void getboard_and_show();
     void make_board();
     void savetofile(QString filePath);
     void readfromfile(QString filePath);
+    void closeEvent(QCloseEvent *event) override;
+    void get_userinfo();
+
 
 private slots:
     /**
@@ -53,9 +58,14 @@ private slots:
     void setchessboardpoint(int x, int y);//<得到来自Boardshow的
 
     /**
-     * @brief undo_operation 接受撤销事件，并令客户端执行
+     * @brief undo_operation 接受悔棋事件，并令客户端执行
      */
     void undo_operation();
+
+    /**
+     * @brief unundo_operation 撤销悔棋事件
+     */
+    void unundo_operation();
 
     /**
      * @brief save_current_game 处理View发出的保存命令，以当前时间命名
@@ -120,12 +130,20 @@ private slots:
      */
     void process_Ultimate_judgement();
 
+    /**
+     * @brief process_minwindow_close 处理主窗口关闭事件
+     */
+    void process_minwindow_close();
+
 public slots:
     void skip_operation();
     /**
      * @brief process_getmash_and_show 处理请求点目事件，与Model交互并将结果返回显示
      */
     void process_getmash_and_show();
+
+signals:
+    void finished();
 
 };
 

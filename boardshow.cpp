@@ -11,12 +11,21 @@ BoardShow::BoardShow(int size,std::vector<std::vector<Chessboardpoint*>> points,
     this->d = d;
     this->setFixedSize(1100,800);
     this->points = points;
+    username = new QStatusBar(this);
+    username->setGeometry((size+2)*d, 2*d, 4*d, d);
+    userwinratio = new QStatusBar(this);
+    userwinratio->setGeometry((size+2)*d, 3*d, 4*d, d);
     statusbar = new QStatusBar(this);
     statusbar->setGeometry((size+2)*d, 4*d, 4*d,d);
     button_undo = new QPushButton("Undo", this);
     button_undo->setGeometry((size+2)*d, 8*d, 4*d, d);
     QObject::connect(button_undo,&QPushButton::clicked,this, [&](){
         emit emit_undosig();
+    });
+    button_unundo = new QPushButton("UnUndo", this);
+    button_unundo->setGeometry((size+2)*d, 6*d, 4*d, d);
+    QObject::connect(button_unundo,&QPushButton::clicked,this, [&](){
+        emit emit_unundosig();
     });
     button_reset = new QPushButton("Reset",this);
     button_reset->setGeometry((size+2)*d, 10*d, 4*d,d);
@@ -90,6 +99,8 @@ void BoardShow::paintEvent(QPaintEvent *event){
     else if(gamestate == Gamestate::Dogfall){
         this->statusbar->showMessage("平局");
     }
+    this->username->showMessage(user_info.name);
+    this->userwinratio->showMessage("胜率："+QString::number(double(user_info.win_games)/(1e-6+user_info.win_games+user_info.loss_games)));
 }
 
 void BoardShow::mouseReleaseEvent(QMouseEvent *event)
@@ -104,10 +115,11 @@ void BoardShow::mouseReleaseEvent(QMouseEvent *event)
     }
 
 
-void BoardShow::showboard(std::vector<std::vector<Chessboardpoint*>> points, GameTurn gameturn, Gamestate gamestate){
+void BoardShow::showboard(std::vector<std::vector<Chessboardpoint*>> points, GameTurn gameturn, Gamestate gamestate, User_info user_info){
     this->points = points;
     this->gameturn = gameturn;
     this->gamestate = gamestate;
+    this->user_info = user_info;
     update();
 }
 

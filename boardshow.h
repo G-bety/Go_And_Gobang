@@ -10,6 +10,15 @@
 #include <QPushButton>
 #include <QStatusBar>
 #include <QMessageBox>
+#include <string>
+
+class User_info{
+public:
+    char name[50];
+    int total_games;
+    int win_games;
+    int loss_games;
+};
 
 class BoardShow : public QWidget
 {
@@ -23,8 +32,12 @@ protected:
     Gamestate gamestate;
     QPushButton* button_undo;
     QPushButton* button_reset;
+    QPushButton* button_unundo;
     QStatusBar* statusbar;
     QPushButton* button_surrender;
+    QStatusBar* username;
+    QStatusBar* userwinratio;
+    User_info user_info;
 
 public:
     explicit BoardShow(QWidget *parent = nullptr);
@@ -32,7 +45,7 @@ public:
     void paintEvent(QPaintEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
     //void change_turn();
-    void showboard(std::vector<std::vector<Chessboardpoint*>> chessboard, GameTurn gameturn, Gamestate gamestate);
+    void showboard(std::vector<std::vector<Chessboardpoint*>> chessboard, GameTurn gameturn, Gamestate gamestate, User_info user_info);
     void closeEvent(QCloseEvent *event) override;
 signals:
     void emit_setsig(int x, int y);
@@ -42,6 +55,7 @@ signals:
     void emit_reset();
     void emit_surrender();
     void emit_Ultimate_judgement();
+    void emit_unundosig();
 };
 
 #endif // BOARDSHOW_H

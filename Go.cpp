@@ -193,6 +193,11 @@ std::tuple<int,int> Go::getmash(){
 }
 
 Gamestate Go::Ultimate_judgment(){
+        return Gamestate::Keeping_battle;
+}
+
+Gamestate Go::GoUltimate_judgment()
+{
     std::tuple<int,int> mashes = getmash();
     int count_black = std::get<0>(mashes);
     int count_white = std::get<1>(mashes);

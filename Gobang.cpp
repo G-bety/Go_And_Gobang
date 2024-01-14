@@ -11,7 +11,6 @@ bool Gobang::set(int x, int y, PointState pointstate){//此处不需要判断游
     if(point->get_state()!=PointState::Blank) return false;
     point->set_state(pointstate);
     last_piece = std::make_tuple(x,y);
-    this->gamestate =  this->Ultimate_judgment();
     return true;
 }
 

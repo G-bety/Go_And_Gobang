@@ -16,22 +16,22 @@
   <widget class="QPushButton" name="Button_SelectGoang">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>160</y>
-     <width>81</width>
+     <x>130</x>
+     <y>100</y>
+     <width>131</width>
      <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>五子棋</string>
+    <string>五子棋（人人）</string>
    </property>
   </widget>
   <widget class="QPushButton" name="Button_SelectGo">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>80</y>
-     <width>81</width>
+     <x>130</x>
+     <y>20</y>
+     <width>131</width>
      <height>31</height>
     </rect>
    </property>
@@ -42,7 +42,65 @@
     </size>
    </property>
    <property name="text">
-    <string>围棋</string>
+    <string>围棋(人人)</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="Button_SelectOthello">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>180</y>
+     <width>131</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>黑白棋(人人)</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="Button_SelectGo_AI">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>60</y>
+     <width>131</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>81</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="text">
+    <string>围棋(人机)</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="Button_SelectGoang_AI">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>140</y>
+     <width>131</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>五子棋（人机）</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="Button_SelectOthello_2">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>220</y>
+     <width>131</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>黑白棋(人机)</string>
    </property>
   </widget>
  </widget>

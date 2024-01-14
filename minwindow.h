@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include "creator.h"
+#include <QVBoxLayout>
+#include <QComboBox>
 
 namespace Ui {
 class MinWindow;
@@ -17,8 +19,9 @@ public:
     ~MinWindow();
 
 signals:
-    void emit_creatorsig(Creator*);
+    void sig_creatorsig(Creator*);
 
+    void sig_closeevent();
 
 private slots:
 
@@ -28,8 +31,14 @@ private slots:
 
     void winclose();
 
+    void on_Button_SelectOthello_clicked(bool checked);
+
+
+    void on_Button_SelectGoang_AI_clicked(bool checked);
+
 private:
     Ui::MinWindow *ui;
+    void closeEvent(QCloseEvent *event) override;
 };
 
 #endif // MINWINDOW_H

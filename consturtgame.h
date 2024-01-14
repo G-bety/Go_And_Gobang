@@ -22,6 +22,7 @@ class ConstructGame:public OperationWithFile
       virtual bool set(int x, int y, PointState pointstate)=0;
       int size;
       int step=0;
+      int observe_step=0;
       GameTurn gameturn = GameTurn::Black;  //下一步应该走棋的子
       Gamestate gamestate = Gamestate::Keeping_battle;
       CareTaker* caretaker;
@@ -68,7 +69,7 @@ class ConstructGame:public OperationWithFile
       /**
        * @brief restore_from_memento理论上这个函数永不会被调用，只有它的继承子类的重写才会有作用
        */
-      virtual void restore_from_memento(MementIF*);
+      virtual void restore_from_memento(MementIF*)=0;
       virtual void savetofile(std::ofstream&)override;
       virtual void readfromfile(std::ifstream&)override;
       virtual void surrender();

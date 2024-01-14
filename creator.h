@@ -10,6 +10,9 @@
 #include "select_gosize.h"
 #include "select_gobangsize.h"
 #include "gobangboardshow.h"
+#include "othello.h"
+#include "othellboardshow.h"
+#include "select_othellosize.h"
 #include <QDir>
 class Controller;
 class Creator
@@ -35,6 +38,23 @@ class Gobang_Creator:public Creator{
     BoardShow * boardshow_product(int size , ConstructGame* game ,Controller* controller) override;
     Select_sizeIF * select_size_product() override;
 };
+
+class Othello_Creator:public Creator{
+    ConstructGame * game_product(int size) override;
+    QDir * dir_product(const QDir&) override;
+    BoardShow * boardshow_product(int size , ConstructGame* game ,Controller* controller) override;
+    Select_sizeIF * select_size_product() override;
+};
+
+class Gobang_AI_1_Creator:public Gobang_Creator{
+    ConstructGame * game_product(int size) override;
+};
+
+
+class Gobang_AI_2_Creator:public Gobang_Creator{
+    ConstructGame * game_product(int size) override;
+};
+
 
 
 #endif // CREATOR_H

@@ -7,7 +7,7 @@
 #include <fstream>
 #include "gobang_caretaker.h"
 class Gobang:public ConstructGame{
-    private:
+protected:
     std::tuple<int,int> last_piece;
 
 
